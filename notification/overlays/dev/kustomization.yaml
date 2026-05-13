@@ -6,4 +6,4 @@ resources:
 
 images:
   - name: edenriel/hospital-notification
-    newTag: latest
+    newTag: 760d61d24673683955ef31e573dcaf6586c4023c
