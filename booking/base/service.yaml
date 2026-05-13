@@ -3,9 +3,11 @@ kind: Service
 metadata:
   name: booking-service
 spec:
+  type: NodePort
   selector:
     app: booking-service
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8082
+      nodePort: 30082
