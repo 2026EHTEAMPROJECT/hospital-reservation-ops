@@ -1,0 +1,9 @@
+namespace: hospital-dev
+
+resources:
+  - ../../base
+  - namespace.yaml
+
+images:
+  - name: seungjo02/hospital-user
+    newTag: latest
