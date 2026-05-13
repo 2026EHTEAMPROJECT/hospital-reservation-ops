@@ -5,5 +5,5 @@ resources:
   - namespace.yaml
 
 images:
-  - name: seungjo02/hospital-booking
+  - name: edenriel/hospital-booking
     newTag: latest

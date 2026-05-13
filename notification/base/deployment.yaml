@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: notification-service
-          image: seungjo02/hospital-notification:latest
+          image: edenriel/hospital-notification:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8084

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: seungjo02/hospital-user:latest
+          image: edenriel/hospital-user:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8081

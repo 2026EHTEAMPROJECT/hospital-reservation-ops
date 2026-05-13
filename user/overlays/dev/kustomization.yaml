@@ -5,5 +5,5 @@ resources:
   - namespace.yaml
 
 images:
-  - name: seungjo02/hospital-user
+  - name: edenriel/hospital-user
     newTag: latest

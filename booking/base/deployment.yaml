@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: booking-service
-          image: seungjo02/hospital-booking:latest
+          image: edenriel/hospital-booking:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8082

@@ -5,5 +5,5 @@ resources:
   - namespace.yaml
 
 images:
-  - name: seungjo02/hospital-notification
+  - name: edenriel/hospital-notification
     newTag: latest
