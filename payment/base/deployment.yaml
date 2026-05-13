@@ -20,7 +20,7 @@ spec:
             - containerPort: 8083
           env:
             - name: MYSQL_HOST
-              value: mysql-service
+              value: payment-mysql
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
