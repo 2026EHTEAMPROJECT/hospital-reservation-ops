@@ -33,9 +33,25 @@ spec:
                   key: password
             - name: RABBITMQ_HOST
               value: rabbitmq-service
+            - name: RABBITMQ_PORT
+              value: "5672"
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 1
+              memory: 1Gi
           readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8083
             initialDelaySeconds: 30
             periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8083
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 3

@@ -21,9 +21,25 @@ spec:
           env:
             - name: RABBITMQ_HOST
               value: rabbitmq-service
+            - name: RABBITMQ_PORT
+              value: "5672"
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
           readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8084
-            initialDelaySeconds: 20
+            initialDelaySeconds: 30
             periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8084
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 3

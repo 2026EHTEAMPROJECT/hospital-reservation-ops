@@ -36,9 +36,23 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: secret
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 1
+              memory: 1Gi
           readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8081
             initialDelaySeconds: 30
             periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 3
