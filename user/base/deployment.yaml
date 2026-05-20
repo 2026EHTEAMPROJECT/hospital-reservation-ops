@@ -24,12 +24,12 @@ spec:
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
+                  name: user-mysql-secret
                   key: username
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
+                  name: user-mysql-secret
                   key: password
             - name: JWT_SECRET
               valueFrom:

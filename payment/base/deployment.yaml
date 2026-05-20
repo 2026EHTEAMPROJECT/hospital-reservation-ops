@@ -24,12 +24,12 @@ spec:
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
+                  name: payment-mysql-secret
                   key: username
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
+                  name: payment-mysql-secret
                   key: password
             - name: RABBITMQ_HOST
               value: rabbitmq-service
@@ -43,14 +43,12 @@ spec:
               cpu: 1
               memory: 1Gi
           readinessProbe:
-            httpGet:
-              path: /actuator/health
+            tcpSocket:
               port: 8083
             initialDelaySeconds: 30
             periodSeconds: 10
           livenessProbe:
-            httpGet:
-              path: /actuator/health
+            tcpSocket:
               port: 8083
             initialDelaySeconds: 60
             periodSeconds: 30

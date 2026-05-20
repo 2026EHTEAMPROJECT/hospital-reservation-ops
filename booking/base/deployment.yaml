@@ -24,12 +24,12 @@ spec:
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
+                  name: booking-mysql-secret
                   key: username
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
+                  name: booking-mysql-secret
                   key: password
             - name: RABBITMQ_HOST
               value: rabbitmq-service
