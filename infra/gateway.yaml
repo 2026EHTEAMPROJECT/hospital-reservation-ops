@@ -1,0 +1,51 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: hospital-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: hospital-vs
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - hospital-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /api/users
+        - uri:
+            prefix: /api/doctors
+      route:
+        - destination:
+            host: user-service
+            port:
+              number: 8081
+    - match:
+        - uri:
+            prefix: /api/reservations
+      route:
+        - destination:
+            host: booking-service
+            port:
+              number: 8082
+    - match:
+        - uri:
+            prefix: /payments
+      route:
+        - destination:
+            host: payment-service
+            port:
+              number: 8083

@@ -5,3 +5,4 @@ namespace: hospital-dev
 
 resources:
   - rabbitmq.yaml
+  - gateway.yaml
