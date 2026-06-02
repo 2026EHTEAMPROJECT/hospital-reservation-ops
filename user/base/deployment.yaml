@@ -36,6 +36,8 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: secret
+            - name: KEYCLOAK_ISSUER_URI
+              value: http://keycloak.hospital-dev.svc.cluster.local:8080/realms/hospital
           resources:
             requests:
               cpu: 200m
