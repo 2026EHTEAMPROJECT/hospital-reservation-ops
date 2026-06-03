@@ -25,6 +25,14 @@ spec:
   http:
     - match:
         - uri:
+            prefix: /api/login
+      route:
+        - destination:
+            host: login-service
+            port:
+              number: 8085
+    - match:
+        - uri:
             prefix: /api/users
         - uri:
             prefix: /api/doctors
