@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: edenriel/hospital-payment
-    newTag: df77804abec9935826708bb8cabc6781d8753dce
+    newTag: c8f77240bd5469894817ffac4d272d10fb7c267d
