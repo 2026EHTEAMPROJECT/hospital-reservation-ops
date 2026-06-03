@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: edenriel/hospital-booking
-    newTag: 70c509f05e02873b456cb667947e61c2ad0ca2c7
+    newTag: 69867a4b74884b0ed0bcbdb58b602a611410d6c8
