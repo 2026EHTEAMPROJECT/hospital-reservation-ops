@@ -57,3 +57,19 @@ spec:
             host: payment-service
             port:
               number: 8083
+    - match:
+        - uri:
+            prefix: /notifications
+      route:
+        - destination:
+            host: notification-service
+            port:
+              number: 8084
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: user-service
+            port:
+              number: 8081
