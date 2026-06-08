@@ -26,6 +26,8 @@ spec:
     - match:
         - uri:
             prefix: /api/login
+        - uri:
+            prefix: /api/register
       route:
         - destination:
             host: login-service
