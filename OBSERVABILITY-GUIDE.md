@@ -180,7 +180,65 @@ kubectl port-forward svc/argocd-server 8443:443 -n argocd
 
 ---
 
-## 7. 자주 겪는 문제
+## 7. RabbitMQ — 메시지 큐 확인 (비동기 통신)
+
+예약→결제→알림, 예약취소→환불은 모두 RabbitMQ 메시지로 비동기 처리됩니다. 큐에 메시지가 잘 흐르는지 확인하는 방법입니다.
+
+### 방법 A — 관리 콘솔(웹 UI)
+
+```bash
+kubectl port-forward svc/rabbitmq 15672:15672 -n hospital-dev
+```
+
+브라우저에서 접속: **http://localhost:15672**
+계정: `guest` / `guest`
+
+| 탭 | 용도 |
+|---|---|
+| **Queues** | 큐 목록 + 각 큐의 메시지 수(Ready/Unacked), 처리율 그래프 |
+| **Exchanges** | `hospital.exchange`(라우팅), `hospital.dlx`(데드레터) |
+| **Connections / Channels** | 각 서비스의 연결 상태 |
+
+확인할 주요 큐:
+
+| 큐 | 흐름 | 라우팅 키 |
+|---|---|---|
+| `booking.payment.queue` | 예약 생성 → 결제 요청 | `booking.payment` |
+| `payment.refund.queue` | **예약 취소 → 환불 요청** | `payment.refund` |
+| `booking.notification.queue` | 예약 상태 → 알림 | `booking.notification` |
+| `payment.notification.queue` | 결제/환불 결과 → 알림 | `payment.notification` |
+| `payment.request.dlq` | 처리 실패 메시지(데드레터) | — |
+
+> Queues 탭에서 `payment.request.dlq` 등 **DLQ에 메시지가 쌓이면** 어딘가에서 처리가 실패하고 있다는 신호입니다.
+
+### 방법 B — 터미널(rabbitmqctl)
+
+```bash
+# rabbitmq 파드 이름
+RABBIT=$(kubectl get pod -n hospital-dev -l app=rabbitmq -o jsonpath='{.items[0].metadata.name}')
+
+# 큐 목록 + 메시지 수
+kubectl exec -n hospital-dev "$RABBIT" -c rabbitmq -- rabbitmqctl list_queues name messages messages_ready messages_unacknowledged
+
+# 바인딩(어떤 라우팅키가 어느 큐로 가는지)
+kubectl exec -n hospital-dev "$RABBIT" -c rabbitmq -- rabbitmqctl list_bindings
+
+# 익스체인지 목록
+kubectl exec -n hospital-dev "$RABBIT" -c rabbitmq -- rabbitmqctl list_exchanges
+```
+
+### 환불 흐름 검증 시연
+
+1. 브라우저에서 예약 생성 → `booking.payment.queue`로 결제요청 메시지가 흘러 결제 완료
+2. 마이페이지에서 **예약 취소** → `payment.refund.queue`로 환불요청 발행
+3. RabbitMQ 콘솔 Queues 탭에서 `payment.refund.queue`의 메시지 처리(전송률) 확인
+4. payment가 환불 처리 후 `payment.notification.queue`로 "환불 완료" 알림 발행 → 알림 페이지에 표시
+
+> 메시지는 소비되면 큐에서 즉시 사라지므로, 큐 메시지 수가 0이어도 정상입니다. **처리율(message rates) 그래프**나 알림 페이지 결과로 흐름을 확인하세요.
+
+---
+
+## 8. 자주 겪는 문제
 
 | 증상 | 원인 | 해결 |
 |---|---|---|
@@ -189,3 +247,4 @@ kubectl port-forward svc/argocd-server 8443:443 -n argocd
 | 8080 포트 이미 사용 중 | 다른 프로세스 점유 | `lsof -i :8080` 으로 PID 확인 후 `kill <PID>` |
 | Grafana No data | 쿼리 미입력 또는 시간 범위 밖 | 쿼리 입력 + 시간 범위 확인 |
 | Kiali Graph 비어 있음 | 트래픽 없는 기간 조회 | 시간 범위를 Last 10m 이상으로 늘림 |
+| 결제/환불이 처리 안 됨 | RabbitMQ 라우팅키 불일치 또는 DLQ 적체 | RabbitMQ 콘솔 Queues에서 DLQ 확인, 바인딩 점검 |
