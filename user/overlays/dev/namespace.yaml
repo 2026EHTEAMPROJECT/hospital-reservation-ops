@@ -4,3 +4,7 @@ metadata:
   name: hospital-dev
   labels:
     istio-injection: enabled
+  annotations:
+    # 네임스페이스는 user-service 앱이 단독 소유한다(다른 overlay 에서는 제거).
+    # 실수로 동기화될 때 네임스페이스가 삭제되지 않도록 prune 비활성.
+    argocd.argoproj.io/sync-options: Prune=false

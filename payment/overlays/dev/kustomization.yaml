@@ -4,7 +4,6 @@ namespace: hospital-dev
 
 resources:
   - ../../base
-  - namespace.yaml
 
 images:
   - name: edenriel/hospital-payment
