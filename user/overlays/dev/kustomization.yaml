@@ -8,4 +8,4 @@ resources:
 
 images:
   - name: edenriel/hospital-user
-    newTag: 5d59451575771dcfbf30f64ddf350057cf589fe2
+    newTag: aab1cac8260033485740fba897328edcf7de947c
